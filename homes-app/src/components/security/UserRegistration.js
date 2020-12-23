@@ -1,4 +1,4 @@
-import { Avatar, Container, TextField, Typography,Grid } from '@material-ui/core'
+import { Avatar, Container, TextField, Typography,Grid, Button } from '@material-ui/core'
 import React, { Component } from 'react'
 import LockOutLineIcon from "@material-ui/icons/LockOutlined"
 
@@ -16,6 +16,10 @@ const style = {
   form: {
     width: "100%",
     marginTop: 10
+  },
+  submit: {
+    marginTop: 15,
+    marginBottom: 20
   }
 }
 
@@ -33,7 +37,23 @@ class UserRegistration extends Component {
           <from style={style.form}>
             <Grid container spacing={2}>
               <Grid item md={6} xs={12}>
-                <TextField name="name" fullWidth label="名前を入力してください" />
+                <TextField name="name" fullWidth label="苗字" />
+              </Grid>
+              <Grid item md={6} xs={12} >
+                <TextField name="last name" fullWidth label="名前"/>
+              </Grid>
+              <Grid item md={6} xs={12} >
+                <TextField name="email" fullWidth label="email"/>
+              </Grid> 
+              <Grid item md={6} xs={12} >
+                <TextField type="password" name="password" fullWidth label="password"/>
+              </Grid>                 
+            </Grid>
+            <Grid container justify="center">
+              <Grid item xs={12} md={6}>
+                <Button type="submit" variant="contained" fullWidth size="large" color="primary" style={style.submit}>
+                  登録
+                </Button>
               </Grid>
             </Grid>
           </from>
