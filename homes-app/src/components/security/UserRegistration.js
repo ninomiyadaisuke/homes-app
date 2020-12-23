@@ -26,6 +26,13 @@ const style = {
   }
 }
 
+const initialUser = {
+  name: "",
+  lastName: "",
+  email: "",
+  password: ""
+}
+
 class UserRegistration extends Component {
   state = {
     firebase:null,
@@ -37,7 +44,7 @@ class UserRegistration extends Component {
     }
   }
 
-  static getDeriveedStateFromProps(nextProps,prevState) {
+  static getDerivedStateFromProps(nextProps,prevState) {
     if (nextProps.firebase === prevState.firebase) {
       return null
     }
@@ -56,7 +63,21 @@ class UserRegistration extends Component {
 
   userRegistration = e => {
     e.preventDefault()
-    console.log("hai",this.state.user);
+    console.log("hai", this.state.user);
+    const { user, firebase } = this.state
+
+    firebase.db
+      .collection("Users")
+      .add(user)
+      .then(userAfter => {
+      console.log("成功しました", userAfter);
+      })
+      .catch(error => {
+        console.log("error", error);
+        this.setState({
+          user: initialUser
+        })
+      })
   }
 
   render() {
