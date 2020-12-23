@@ -1,6 +1,9 @@
-import { Avatar, Container, TextField, Typography,Grid } from '@material-ui/core'
+import { Avatar, Container, TextField, Typography,Grid, Button } from '@material-ui/core'
 import React, { Component } from 'react'
 import LockOutLineIcon from "@material-ui/icons/LockOutlined"
+import { compose } from "recompose"
+import { consumerFirebase } from "../../server"
+
 
 const style = {
   paper: {
@@ -16,10 +19,67 @@ const style = {
   form: {
     width: "100%",
     marginTop: 10
+  },
+  submit: {
+    marginTop: 15,
+    marginBottom: 20
   }
 }
 
+const initialUser = {
+  name: "",
+  lastName: "",
+  email: "",
+  password: ""
+}
+
 class UserRegistration extends Component {
+  state = {
+    firebase:null,
+    user: {
+      name: "",
+      lastName: "",
+      email: "",
+      password: ""
+    }
+  }
+
+  static getDerivedStateFromProps(nextProps,prevState) {
+    if (nextProps.firebase === prevState.firebase) {
+      return null
+    }
+    return {
+      firebase: nextProps.firebase
+    }
+  }
+
+  onChange = e => {
+    let user = Object.assign({}, this.state.user)
+    user[e.target.name] = e.target.value
+    this.setState({
+      user: user
+    })
+  }
+
+  userRegistration = e => {
+    e.preventDefault()
+    console.log("hai", this.state.user);
+    const { user, firebase } = this.state
+
+    firebase.db
+      .collection("Users")
+      .add(user)
+      .then(userAfter => {
+      console.log("成功しました", userAfter);
+      })
+      .catch(error => {
+        console.log("error", error);
+        this.setState({
+          user: initialUser
+        })
+      })
+  }
+
   render() {
     return (
         <Container maxWidth="md">
@@ -33,7 +93,23 @@ class UserRegistration extends Component {
           <from style={style.form}>
             <Grid container spacing={2}>
               <Grid item md={6} xs={12}>
-                <TextField name="name" fullWidth label="名前を入力してください" />
+                <TextField name="name" onChange={this.onChange} value={this.state.user.name} fullWidth label="苗字" />
+              </Grid>
+              <Grid item md={6} xs={12} >
+                <TextField name="lastName" onChange={this.onChange} value={this.state.user.lastName} fullWidth label="名前"/>
+              </Grid>
+              <Grid item md={6} xs={12} >
+                <TextField name="email" onChange={this.onChange} value={this.state.user.email} fullWidth label="email"/>
+              </Grid> 
+              <Grid item md={6} xs={12} >
+                <TextField type="password" name="password" onChange={this.onChange} value={this.state.user.password} fullWidth label="password"/>
+              </Grid>                 
+            </Grid>
+            <Grid container justify="center">
+              <Grid item xs={12} md={6}>
+                <Button type="submit" onClick={this.userRegistration} variant="contained" fullWidth size="large" color="primary" style={style.submit}>
+                  登録
+                </Button>
               </Grid>
             </Grid>
           </from>
@@ -43,4 +119,5 @@ class UserRegistration extends Component {
   }
 }
 
-export default UserRegistration
+
+export default compose(consumerFirebase)(UserRegistration)
