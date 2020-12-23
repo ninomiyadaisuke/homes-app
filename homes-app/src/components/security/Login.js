@@ -30,12 +30,34 @@ class Login extends Component {
     }
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.firebase === prevState.firebase) {
+      return null
+    }
+
+    return {
+      firebase: nextProps.firebase
+    }
+  }
+
   onChange = e => {
     let user = Object.assign({}, this.state.user)
     user[e.target.name] = e.target.value
     this.setState({
       user: user
     })
+  }
+
+  login = e => {
+    const { firebase, user } = this.state
+    firebase.auth
+      .signInWithEmailAndPassword(user.email, user.password)
+      .then(auth => {
+      
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
   render() {
