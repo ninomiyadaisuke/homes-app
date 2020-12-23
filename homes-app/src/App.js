@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
 import theme from "./theme/theme"
 import UserRegistration from "./components/security/UserRegistration"
+import Login from './components/security/Login';
 
 class App extends Component{
   render() {
@@ -19,6 +20,7 @@ class App extends Component{
             <Switch>
               <Route path="/" exact component={ListaInmuebles}></Route>
               <Route path="/auth/userregistration" exact component={UserRegistration}></Route>
+              <Route path="/auth/login" exact component={Login}></Route>
             </Switch>
           </Grid>
           
