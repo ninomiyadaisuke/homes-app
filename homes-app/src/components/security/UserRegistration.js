@@ -1,6 +1,9 @@
 import { Avatar, Container, TextField, Typography,Grid, Button } from '@material-ui/core'
 import React, { Component } from 'react'
 import LockOutLineIcon from "@material-ui/icons/LockOutlined"
+import { compose } from "recompose"
+import { consumerFirebase } from "../../server"
+
 
 const style = {
   paper: {
@@ -25,11 +28,21 @@ const style = {
 
 class UserRegistration extends Component {
   state = {
+    firebase:null,
     user: {
       name: "",
       lastName: "",
       email: "",
       password: ""
+    }
+  }
+
+  static getDeriveedStateFromProps(nextProps,prevState) {
+    if (nextProps.firebase === prevState.firebase) {
+      return null
+    }
+    return {
+      firebase: nextProps.firebase
     }
   }
 
@@ -85,4 +98,5 @@ class UserRegistration extends Component {
   }
 }
 
-export default UserRegistration
+
+export default compose(consumerFirebase)(UserRegistration)
