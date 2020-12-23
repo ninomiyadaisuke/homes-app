@@ -10,3 +10,4 @@ export const consumerFirebase = Component => props => (
     {firebase => <Component {...props} firebase={firebase}/>}
   </FirebaseContext.Consumer>
 )
+
