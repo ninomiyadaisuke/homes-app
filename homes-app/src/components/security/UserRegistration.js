@@ -82,6 +82,7 @@ class UserRegistration extends Component {
           .add(userDB)
           .then(userAfter => {
             console.log("成功しました", userAfter);
+            this.props.history.push("/")
             this.setState({
               user: initialUser
             })
