@@ -49,11 +49,12 @@ class Login extends Component {
   }
 
   login = e => {
+    e.preventDefault()
     const { firebase, user } = this.state
     firebase.auth
       .signInWithEmailAndPassword(user.email, user.password)
       .then(auth => {
-      
+        this.props.history.push("/")
       })
       .catch(error => {
         console.log(error);
@@ -95,6 +96,7 @@ class Login extends Component {
               fullWidth
               variant="contained"
               color="primary"
+              onClick={this.login}
             >
               送信
             </Button>

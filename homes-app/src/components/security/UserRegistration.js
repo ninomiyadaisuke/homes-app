@@ -66,17 +66,32 @@ class UserRegistration extends Component {
     console.log("hai", this.state.user);
     const { user, firebase } = this.state
 
-    firebase.db
-      .collection("Users")
-      .add(user)
-      .then(userAfter => {
-      console.log("成功しました", userAfter);
+    firebase.auth
+      .createUserWithEmailAndPassword(user.email, user.password)
+      .then(auth => {
+
+        const userDB = {
+          userid: auth.user.uid,
+          email: user.email,
+          name: user.name,
+          lastName: user.lastName
+        }
+
+        firebase.db
+          .collection("Users")
+          .add(userDB)
+          .then(userAfter => {
+            console.log("成功しました", userAfter);
+            this.setState({
+              user: initialUser
+            })
+          })
+          .catch(error => {
+            console.log("error", error);
+          })        
       })
       .catch(error => {
-        console.log("error", error);
-        this.setState({
-          user: initialUser
-        })
+        console.log(error);
       })
   }
 
