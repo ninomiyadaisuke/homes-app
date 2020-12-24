@@ -33,8 +33,24 @@ const App = (props) => {
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         open={openSnackbar ? openSnackbarReducer.open : false}
         autoHideDuration={3000}
+        ContentProps={{
+          "aria-describedby" : "message-id" 
+        }}
+        message={
+          <sapan id="message-id">
+            {openSnackbar ? openSnackbar.message : ""}
+          </sapan>
+        }
+        onClose={() => 
+          dispatch({
+            type: "OPEN_SNACKBAR",
+            openMessage: {
+              open: false,
+              message: ""
+            }
+          })
+        }
       >
-
       </Snackbar>
       <Router>
         <MuiThemeProvider theme={theme}>
