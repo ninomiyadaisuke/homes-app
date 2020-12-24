@@ -9,11 +9,17 @@ import theme from "./theme/theme"
 import UserRegistration from "./components/security/UserRegistration"
 import Login from './components/security/Login';
 import { FirebaseContext } from "./server"
+import { useStateValue } from "./session/store"
+import { Snackbar } from '@material-ui/core';
+import openSnackbarReducer from './session/reducers/openSnackbarReducer';
 
 
 const App = (props) => {
   let firebase = useContext(FirebaseContext)
   const [authenticationStarted, setupFirebaseInitial] = useState(false)
+
+  const [{ openSnackbar }, dispatch] = useStateValue()
+  //reducers/index.js
 
   useEffect(() => {
     firebase.isStarted().then(val => {
@@ -21,7 +27,15 @@ const App = (props) => {
     })
   })
 
-  return authenticationStarted !== false ?(
+  return authenticationStarted !== false ? (
+    <>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        open={openSnackbar ? openSnackbarReducer.open : false}
+        autoHideDuration={3000}
+      >
+
+      </Snackbar>
       <Router>
         <MuiThemeProvider theme={theme}>
           <AppNavbar />
@@ -36,6 +50,8 @@ const App = (props) => {
           
         </MuiThemeProvider>
       </Router>    
+    </>
+
   )
     :null
 }

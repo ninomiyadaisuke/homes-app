@@ -5,5 +5,6 @@ export const mainReducer = ({ session, openSnacbar }, action) => {
   return {
     session: sessionReducer(session, action),
     openSnacbar: openSnackbarReducer(openSnacbar, action)
+    //App.js
   }
 }
