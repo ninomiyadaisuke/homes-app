@@ -4,14 +4,13 @@ import './App.css';
 import ListaInmuebles from "./components/vistas/ListaInmuebles"
 import AppNavbar from "./components/layout/AppNavbar"
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider"
+import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import theme from "./theme/theme"
 import UserRegistration from "./components/security/UserRegistration"
 import Login from './components/security/Login';
 
-class App extends Component{
-  render() {
-    return (
+const App = (props) => {
+  return (
       <Router>
         <MuiThemeProvider theme={theme}>
           <AppNavbar />
@@ -25,9 +24,8 @@ class App extends Component{
           </Grid>
           
         </MuiThemeProvider>
-      </Router>
-    )
-  }
+      </Router>    
+  )
 }
 
 export default App;
