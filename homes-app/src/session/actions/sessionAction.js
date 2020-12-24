@@ -44,7 +44,31 @@ export const createUser = (dispatch, firebase, user) => {
               session: user,
               authenticated: true
             })
+            resolve()
           })
       })
+      .catch(error => {
+        console.log("error",error);
+      })
+  })
+}
+
+export const goOutSession = (dispatch, firebase) => {
+  return new Promise((resolve, eject) => {
+    firebase.auth.signOut().then(goOut => {
+      dispatch({
+        type: "GOOUT_SESSION",
+        newUser: {
+          name: "",
+          lastName: "",
+          email: "",
+          photo: "",
+          id: "",
+          telephone: ""
+        },
+        authenticated: false
+      })
+      resolve()
+    })
   })
 }

@@ -15,7 +15,7 @@ const sessionReducer = (state, action) => {
     case "GOOUT_SESSION":
       return {
         ...state,
-        user: action.session,
+        user: action.newUser,
         authenticated: action.authenticated
       }
     default:
