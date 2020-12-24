@@ -8,9 +8,20 @@ import { ThemeProvider as MuiThemeProvider } from '@material-ui/core/styles'
 import theme from "./theme/theme"
 import UserRegistration from "./components/security/UserRegistration"
 import Login from './components/security/Login';
+import { FirebaseContext } from "./server"
+
 
 const App = (props) => {
-  return (
+  let firebase = useContext(FirebaseContext)
+  const [authenticationStarted, setupFirebaseInitial] = useState(false)
+
+  useEffect(() => {
+    firebase.isStarted().then(val => {
+      setupFirebaseInitial(val)
+    })
+  })
+
+  return authenticationStarted !== false ?(
       <Router>
         <MuiThemeProvider theme={theme}>
           <AppNavbar />
@@ -26,6 +37,7 @@ const App = (props) => {
         </MuiThemeProvider>
       </Router>    
   )
+    :null
 }
 
 export default App;
