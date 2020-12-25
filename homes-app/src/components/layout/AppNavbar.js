@@ -38,7 +38,12 @@ class AppNavbar extends Component {
         .doc(firebase.auth.currentUser.uid)
         .get()
         .then(doc => {
-          
+          const userDB = doc.data()
+          dispatch({
+            type: "START_SESSION",
+            session: userDB,
+            authenticated: true
+          })
         })
     }
     
@@ -52,14 +57,18 @@ class AppNavbar extends Component {
     return newObjects
   }
   render() {
-    return (
+    const [{session}, dispatch] = this.context
+    return session ? (session.authenticated ? (
       <div>
         <AppBar position="static">
           <BarSession/>
         </AppBar>
       </div>
     )
+      :null
+    )
+      :null
   }
 }
 
-export default compose(withStyles(styles))(AppNavbar)
+export default compose(consumerFirebase,withStyles(styles))(AppNavbar)
