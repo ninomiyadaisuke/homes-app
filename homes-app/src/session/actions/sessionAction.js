@@ -45,11 +45,12 @@ export const createUser = (dispatch, firebase, user) => {
               session: user,
               authenticated: true
             })
-            resolve()
+            resolve({status: true})
           })
       })
       .catch(error => {
-        console.log("error",error);
+        console.log("error", error);
+        resolve({status: false, message: error})
       })
   })
 }
