@@ -3,6 +3,10 @@ import React, { Component } from 'react'
 import LockOutLineIcon from "@material-ui/icons/LockOutlined"
 import { compose } from "recompose"
 import { consumerFirebase } from "../../server"
+import { createUser } from "../../session/actions/sessionAction"
+import { openMessageScreen } from "../../session/actions/snackbarAction"
+import { StateContext } from "../../session/store"
+
 
 
 const style = {
@@ -34,6 +38,8 @@ const initialUser = {
 }
 
 class UserRegistration extends Component {
+  static contextType = StateContext
+
   state = {
     firebase:null,
     user: {
@@ -61,39 +67,20 @@ class UserRegistration extends Component {
     })
   }
 
-  userRegistration = e => {
+  userRegistration = async e => {
     e.preventDefault()
-    console.log("hai", this.state.user);
-    const { user, firebase } = this.state
+    const [{ session }, dispatch] = this.context
+    const { firebase, user } = this.state
 
-    firebase.auth
-      .createUserWithEmailAndPassword(user.email, user.password)
-      .then(auth => {
-
-        const userDB = {
-          userid: auth.user.uid,
-          email: user.email,
-          name: user.name,
-          lastName: user.lastName
-        }
-
-        firebase.db
-          .collection("Users")
-          .add(userDB)
-          .then(userAfter => {
-            console.log("成功しました", userAfter);
-            this.props.history.push("/")
-            this.setState({
-              user: initialUser
-            })
-          })
-          .catch(error => {
-            console.log("error", error);
-          })        
+    let callback = await createUser(dispatch, firebase, user)
+    if (callback.status) {
+      this.props.history.push("/")
+    } else {
+      openMessageScreen(dispatch, {
+        open: true,
+        message: callback.message.message
       })
-      .catch(error => {
-        console.log(error);
-      })
+    }
   }
 
   render() {

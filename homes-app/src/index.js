@@ -4,13 +4,19 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Firebase, { FirebaseContext } from "./server"
+import { initialState } from "./session/initialState"
+import { StateProvider } from "./session/store"
+import sessionReducer from "./session/reducers/sessionReducer"
+import { mainReducer } from "./session/reducers"
 
-// const FirebaseContext = React.createContext()
 
 ReactDOM.render(
   <React.StrictMode>
     <FirebaseContext.Provider value={new Firebase()}>
-      <App />
+      <StateProvider initialState={initialState} reducer={mainReducer}>
+        <App />
+      </StateProvider>
+      
     </FirebaseContext.Provider>
   </React.StrictMode>,
   document.getElementById('root')
