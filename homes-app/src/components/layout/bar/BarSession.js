@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Button,IconButton, Toolbar, Typography} from "@material-ui/core"
+import {Button,Drawer,IconButton, Toolbar, Typography} from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
 import { consumerFirebase } from "../../../server"
 import { compose } from "recompose"
@@ -47,6 +47,9 @@ class BarSession extends Component {
     const {classes} = this.props
     return (
       <div>
+        <Drawer>
+          
+        </Drawer>
         <Toolbar>
           <IconButton color="inherit">
             <i className="material-icons">menu</i>
