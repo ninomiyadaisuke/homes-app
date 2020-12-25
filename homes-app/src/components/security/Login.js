@@ -3,8 +3,9 @@ import React, { Component } from 'react'
 import LockOutLineIcon from "@material-ui/icons/LockOutlined"
 import { consumerFirebase } from '../../server'
 import { compose } from "recompose"
-import { startSession } from "../../session/actions/snackbarAction"
+import { startSession } from "../../session/actions/sessionAction"
 import { StateContext } from '../../session/store'
+import { openMessageScreen } from "../../session/actions/snackbarAction"
 
 const style = {
   paper: {
@@ -24,7 +25,7 @@ const style = {
 }
 
 class Login extends Component {
-  static contextType = StateContext()
+  static contextType = StateContext
   //store
 
   state = {
@@ -58,9 +59,18 @@ class Login extends Component {
     const [{session}, dispatch] = this.context
     const { firebase, user } = this.state
     const { email, password } = user
-    //sessionAction
+                         //sessionAction
     let callback = await startSession(dispatch, firebase, email, password)
-    
+    if (callback.status) {
+      this.props.history.push("/")
+    } else {
+      //snackbarAction
+      openMessageScreen(dispatch, {
+        open: true,
+        message: callback.message.message
+        //sessionAction catch message :error
+      })
+    }
   }
 
   render() {

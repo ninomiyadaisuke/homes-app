@@ -14,11 +14,12 @@ export const startSession = (dispatch, firebase, email, password) => {
               session: userDB,
               authenticated: true
             })
-            resolve()
+            resolve({status: true})
           })
       }) 
       .catch(error => {
         console.log("error", error);
+        resolve({status: false, message: error})
       })
   })
 }

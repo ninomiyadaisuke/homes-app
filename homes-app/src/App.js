@@ -1,4 +1,4 @@
-import { Component, useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Grid from "@material-ui/core/Grid"
 import './App.css';
 import ListaInmuebles from "./components/vistas/ListaInmuebles"
@@ -26,13 +26,13 @@ const App = (props) => {
       setupFirebaseInitial(val)
     })
   })
-
+  
   return authenticationStarted !== false ? (
     <>
       <Snackbar
         anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-        open={openSnackbar ? openSnackbarReducer.open : false}
-        autoHideDuration={3000}
+        open={openSnackbar ? openSnackbar.open : false}
+        autoHideDuration={10000}
         ContentProps={{
           "aria-describedby" : "message-id" 
         }}
@@ -50,8 +50,8 @@ const App = (props) => {
             }
           })
         }
-      >
-      </Snackbar>
+      ></Snackbar>
+      
       <Router>
         <MuiThemeProvider theme={theme}>
           <AppNavbar />
