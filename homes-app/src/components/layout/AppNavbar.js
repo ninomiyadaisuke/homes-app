@@ -4,10 +4,44 @@ import BarSession from './bar/BarSession'
 import { withStyles } from "@material-ui/styles"
 import { compose } from "recompose"
 import { consumerFirebase } from "../../server"
+import { StateContext } from "../../session/store"
+
+
+const styles = theme => ({
+  sectionDesktop: {
+    display: "none",
+    [theme.breakpoints.up("md")]: {
+      display: "flex"
+    }
+  },
+  sectionMobile: {
+    display: "flex",
+    [theme.breakpoints.up("md")]: {
+      display: "none"
+    }
+  }
+})
 
 class AppNavbar extends Component {
+  static contextType = StateContext
   state = {
     firebase: null
+  }
+
+  componentDidMount() {
+    const { firebase } = this.state //local state
+    const [{ session }, dispatch] = this.context //global state
+    
+    if (firebase.auth.currentUser !== null && !session) {
+      firebase.db
+        .collection("Users")
+        .doc(firebase.auth.currentUser.uid)
+        .get()
+        .then(doc => {
+          
+        })
+    }
+    
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
