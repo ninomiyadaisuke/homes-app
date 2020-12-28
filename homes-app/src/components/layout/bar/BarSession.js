@@ -6,6 +6,7 @@ import { compose } from "recompose"
 import { StateContext } from "../../../session/store"
 import { goOutSession } from "../../../session/actions/sessionAction"
 import { MenuRight } from "./MenuRight"
+import { MenuLeft } from "./MenuLeft"
 import photoUserTemp from "../../../image/IMG_20200729_231352 (1).jpg"
 import { withRouter } from 'react-router-dom'
 
@@ -86,6 +87,21 @@ class BarSession extends Component {
     
     return (
       <div>
+        <Drawer
+          open={this.state.right}
+          onClose={this.toggleDrawer("left", false)}
+          anchor="right"
+        >
+          <div
+            role="button"
+            onClick={this.toggleDrawer("left", false)}
+            onKeyDown={this.toggleDrawer("left", false)}
+          >
+            <MenuLeft
+              classes={classes}
+              />
+          </div>
+        </Drawer>        
         <Drawer
           open={this.state.right}
           onClose={this.toggleDrawer("right", false)}
