@@ -128,7 +128,7 @@ class BarSession extends Component {
           </Typography>
           <div className={classes.grow}></div>
           <div  className={classes.sectionDesktop} >
-            <IconButton color="inherit" component={Link} to="" >
+            <IconButton color="default" component={Link} to="" >
               <i className="material-icons">mail_outline</i>
             </IconButton>
             <Button color="inherit" onClick={this.goOutSessionApp}>
