@@ -1,12 +1,24 @@
 import React, { Component } from 'react'
-import {Button,IconButton, Toolbar, Typography} from "@material-ui/core"
+import {Avatar, Button,Drawer,IconButton, Toolbar, Typography} from "@material-ui/core"
 import { withStyles } from "@material-ui/core/styles"
+import { consumerFirebase } from "../../../server"
+import { compose } from "recompose"
+import { StateContext } from "../../../session/store"
+import { goOutSession } from "../../../session/actions/sessionAction"
+import { MenuRight } from "./MenuRight"
+import { MenuLeft } from "./MenuLeft"
+import photoUserTemp from "../../../image/IMG_20200729_231352 (1).jpg"
+import { withRouter } from 'react-router-dom'
+import {Link} from "react-router-dom"
+
+
+
 
 const styles = theme => ({
   sectionDesktop: {
     display: "none",
     [theme.breakpoints.up("md")]: {
-      display: "flex"
+      display: "flex",
     }
   },
   sectionMobile: {
@@ -17,27 +29,121 @@ const styles = theme => ({
   },
   grow: {
     flexGrow: 1
+  },
+  avatarSize: {
+    width: 40,
+    height: 40
+  },
+  listItemText: {
+    fontSize: "14px",
+    fontWidth: 600,
+    paddingLeft: "15px",
+    color: "#212121"
+  },
+  list: {
+    width: 250
   }
 })
 
 class BarSession extends Component {
+  static contextType = StateContext
+
+  state = {
+    firebase: null,
+    right: false,
+    left: false
+  }
+
+  goOutSessionApp = () => {
+    const { firebase } = this.state
+    const [{ session }, dispatch] = this.context
+    goOutSession(dispatch, firebase).then(success => {
+      this.props.history.push("/auth/login")
+    })
+  }
+
+  toggleDrawer = (size, open) => () => {
+    this.setState(
+      {
+        [size]: open
+      }
+    )
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let newObjects = {}
+    if (nextProps.firebase !== prevState.firebase) {
+      newObjects.firebase = nextProps.firebase
+    }
+    return newObjects
+  }
+
+
   render() {
-    const {classes} = this.props
+    const { classes } = this.props
+    const [{ session }, dispatch] = this.context
+    const { user } = session
+    let textUser = user.name + " " + user.lastName
+    
     return (
       <div>
+        <Drawer
+          open={this.state.left}
+          onClose={this.toggleDrawer("left", false)}
+          anchor="left"
+        >
+          <div
+            role="button"
+            onClick={this.toggleDrawer("left", false)}
+            onKeyDown={this.toggleDrawer("left", false)}
+          >
+            <MenuLeft
+              classes={classes}
+              />
+          </div>
+        </Drawer>        
+        <Drawer
+          open={this.state.right}
+          onClose={this.toggleDrawer("right", false)}
+          anchor="right"
+        >
+          <div
+            role="button"
+            onClick={this.toggleDrawer("right", false)}
+            onKeyDown={this.toggleDrawer("right", false)}
+          >
+            <MenuRight classes={classes}
+              user={user}
+              textuser={textUser}
+              photoUser={photoUserTemp}
+              goOutSession={this.goOutSessionApp} />
+          </div>
+        </Drawer>
         <Toolbar>
-          <IconButton color="inherit">
+          <IconButton color="inherit" onClick={this.toggleDrawer("left", true)}>
             <i className="material-icons">menu</i>
           </IconButton>
           <Typography variant="h6">
             OSAMU HOMES
           </Typography>
           <div className={classes.grow}></div>
-          <div className={classes.sectionDesktop}>
-            <Button color="inherit">Login</Button>
+          <div  className={classes.sectionDesktop} >
+            <IconButton color="inherit" component={Link} to="" >
+              <i className="material-icons">mail_outline</i>
+            </IconButton>
+            <Button color="inherit" onClick={this.goOutSessionApp}>
+              Logout
+            </Button>
+            <Button color="inherit">{textUser}</Button>
+            <Avatar
+              src={photoUserTemp}
+            >
+            </Avatar>
           </div>
           <div className={classes.sectionMobile}>
-            <IconButton color="inherit">
+            <IconButton color="inherit"
+              onClick={this.toggleDrawer("right", true)}
+            >
               <i className="material-icons">more_vert</i>
             </IconButton>
           </div>
@@ -47,4 +153,7 @@ class BarSession extends Component {
   }
 }
 
-export default withStyles(styles)(BarSession)
+export default compose(
+  withRouter,
+  withStyles(styles),
+  consumerFirebase)(BarSession)

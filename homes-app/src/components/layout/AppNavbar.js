@@ -1,15 +1,75 @@
 import React, { Component } from 'react'
 import AppBar from "@material-ui/core/AppBar"
 import BarSession from './bar/BarSession'
+import { withStyles } from "@material-ui/styles"
+import { compose } from "recompose"
+import { consumerFirebase } from "../../server"
+import { StateContext } from "../../session/store"
 
-export default class AppNavbar extends Component {
+
+const styles = theme => ({
+  sectionDesktop: {
+    display: "none",
+    [theme.breakpoints.up("md")]: {
+      display: "flex",
+      
+    }
+  },
+  sectionMobile: {
+    display: "flex",
+    [theme.breakpoints.up("md")]: {
+      display: "none"
+    }
+  }
+})
+
+class AppNavbar extends Component {
+  static contextType = StateContext
+  state = {
+    firebase: null
+  }
+
+  componentDidMount() {
+    const { firebase } = this.state //local state
+    const [{ session }, dispatch] = this.context //global state
+    
+    if (firebase.auth.currentUser !== null && !session) {
+      firebase.db
+        .collection("Users")
+        .doc(firebase.auth.currentUser.uid)
+        .get()
+        .then(doc => {
+          const userDB = doc.data()
+          dispatch({
+            type: "START_SESSION",
+            session: userDB,
+            authenticated: true
+          })
+        })
+    }
+    
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    let newObjects = {}
+    if (nextProps.firebase !== prevState.firebase) {
+      newObjects.firebase = nextProps.firebase
+    }
+    return newObjects
+  }
   render() {
-    return (
+    const [{session}, dispatch] = this.context
+    return session ? (session.authenticated ? (
       <div>
         <AppBar position="static">
           <BarSession/>
         </AppBar>
       </div>
     )
+      :null
+    )
+      :null
   }
 }
+
+export default compose(consumerFirebase,withStyles(styles))(AppNavbar)
