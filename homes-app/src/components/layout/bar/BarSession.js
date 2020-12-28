@@ -6,7 +6,8 @@ import { compose } from "recompose"
 import { StateContext } from "../../../session/store"
 import { goOutSession } from "../../../session/actions/sessionAction"
 import { MenuRight } from "./MenuRight"
-import photoUserTemp from "../../../logo.svg"
+import photoUserTemp from "../../../image/IMG_20200729_231352 (1).jpg"
+import { withRouter } from 'react-router-dom'
 
 
 
@@ -27,6 +28,19 @@ const styles = theme => ({
   },
   grow: {
     flexGrow: 1
+  },
+  avatarSize: {
+    width: 40,
+    height: 40
+  },
+  listItemText: {
+    fontSize: "14px",
+    fontWidth: 600,
+    paddingLeft: "15px",
+    color: "#212121"
+  },
+  list: {
+    width: 250
   }
 })
 
@@ -34,15 +48,26 @@ class BarSession extends Component {
   static contextType = StateContext
 
   state = {
-    firebase: null
+    firebase: null,
+    right: false
+
   }
 
-  goOutSession = () => {
+  goOutSessionApp = () => {
     const { firebase } = this.state
-    const [{session}, dispatch] = this.context
+    const [{ session }, dispatch] = this.context
+    goOutSession(dispatch, firebase).then(success => {
+      this.props.history.push("/auth/login")
+    })
   }
 
-  
+  toggleDrawer = (size, open) => () => {
+    this.setState(
+      {
+        [size]: open
+      }
+    )
+  }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     let newObjects = {}
@@ -71,7 +96,11 @@ class BarSession extends Component {
             onClick={this.toggleDrawer("right", false)}
             onKeyDown={this.toggleDrawer("right", false)}
           >
-            <MenuRight classes={classes} user={user} textuser={textUser} photo={photoUserTemp} goOutSession={this.goOutSession}/>
+            <MenuRight classes={classes}
+              user={user}
+              textuser={textUser}
+              photoUser={photoUserTemp}
+              goOutSession={this.goOutSessionApp} />
           </div>
         </Drawer>
         <Toolbar>
@@ -86,7 +115,9 @@ class BarSession extends Component {
             <Button color="inherit">Login</Button>
           </div>
           <div className={classes.sectionMobile}>
-            <IconButton color="inherit">
+            <IconButton color="inherit"
+              onClick={this.toggleDrawer("right", true)}
+            >
               <i className="material-icons">more_vert</i>
             </IconButton>
           </div>
@@ -96,4 +127,7 @@ class BarSession extends Component {
   }
 }
 
-export default compose(withStyles(styles),consumerFirebase)(BarSession)
+export default compose(
+  withRouter,
+  withStyles(styles),
+  consumerFirebase)(BarSession)
