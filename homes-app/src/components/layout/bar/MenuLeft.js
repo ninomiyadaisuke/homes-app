@@ -1,3 +1,4 @@
+import React from "react"
 import { Divider, Link, List, ListItem, ListItemText } from "@material-ui/core";
 
 
@@ -12,15 +13,15 @@ export const MenuLeft = ({ classes }) => (
     <Divider />
     <List>
       <ListItem component={Link} button to="">
-        <i className="material_icons">add_box</i>
+        <i className="material-icons">add_box</i>
         <ListItemText classes={{primary: classes.ListItemText}} primary="New Property"/>
       </ListItem>
       <ListItem component={Link} button to="">
-        <i className="material_icons">business</i>
+        <i className="material-icons">business</i>
         <ListItemText classes={{primary: classes.ListItemText}} primary="Estate"/>
       </ListItem>   
       <ListItem component={Link} button to="">
-        <i className="material_icons">mail_outline</i>
+        <i className="material-icons">mail_outline</i>
         <ListItemText classes={{primary: classes.ListItemText}} primary="Message"/>
       </ListItem>         
     </List>
