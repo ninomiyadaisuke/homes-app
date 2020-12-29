@@ -12,7 +12,7 @@ import { FirebaseContext } from "./server"
 import { useStateValue } from "./session/store"
 import { Snackbar } from '@material-ui/core';
 import openSnackbarReducer from './session/reducers/openSnackbarReducer';
-
+import AuthenticatedRoute from "./components/security/AuthenticatedRoute"
 
 const App = (props) => {
   let firebase = useContext(FirebaseContext)
@@ -58,9 +58,19 @@ const App = (props) => {
           
           <Grid container>
             <Switch>
-              <Route path="/" exact component={ListaInmuebles}></Route>
-              <Route path="/auth/userregistration" exact component={UserRegistration}></Route>
-              <Route path="/auth/login" exact component={Login}></Route>
+              <AuthenticatedRoute
+                exact path="/"
+                authenticatedFirebase={firebase.auth.currentUser}
+                component={ListaInmuebles}
+              />
+              <Route
+                path="/auth/userregistration"
+                exact component={UserRegistration}
+              />
+              <Route
+                path="/auth/login"
+                exact component={Login}
+              />
             </Switch>
           </Grid>
           
