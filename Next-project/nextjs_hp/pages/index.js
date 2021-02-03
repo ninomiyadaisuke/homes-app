@@ -1,14 +1,15 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div className="min-h-screen py-0 px-2 flex flex-col justify-center items-center">
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <footer className={styles.footer}>
+      <h1>ハロー</h1>
+      {/* <footer className={styles.footer}>
         <a
           href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           target="_blank"
@@ -17,7 +18,7 @@ export default function Home() {
           Powered by{' '}
           <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
         </a>
-      </footer>
+      </footer> */}
     </div>
   )
 }
